@@ -18,6 +18,14 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
+                            <div class=" mb-3">
+                                <select class="custom-select custom-select-sm" id="options">
+                                    <option selected value="0">Pilih Alat</option>
+                                    @foreach ($devices as $device )
+                                        <option value="{{$device->id}}">{{$device->name}}</option>
+                                    @endforeach
+                                  </select>
+                            </div>
                             <div class="table-responsive">
                                 <table class="table-striped table"
                                     id="loggingTable">
@@ -67,11 +75,12 @@
     <!-- Page Specific JS File -->
     <script>
         $(document).ready(function() {
-            $('#loggingTable').DataTable({
+            var table = $('#loggingTable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                url : "{{ route('logging') }}"
+                    url : "{{ route('logging') }}",
+                    data : {'deviceId' : localStorage.getItem('selectedOption')},
                 },
                 columnDefs: [
                 { 
@@ -94,7 +103,39 @@
                 {data: 'water_temp', name: 'water_temp'}
                 ] 
             });
+
+            selectDevice();
+
+            function refreshTable() {
+                table.draw();
+            }
+
+            function selectDevice(){
+                const selectElement = $('#options');
+                selectElement.on('change', function() {
+                    const selectedValue = selectElement.val();
+                    localStorage.setItem('selectedOption', selectedValue);
+                    // console.log(localStorage.getItem('selectedOption'));
+                    refreshTable();
+                    location.reload();
+                });
+
+                // Cek apakah ada data tersimpan di Local Storage saat halaman dimuat
+                const savedValue = localStorage.getItem('selectedOption');
+                if (savedValue) {
+                    selectElement.val(savedValue);
+                }
+
+            }
+
+           
         });
+       
+
+        
+
+        
+
     </script>
     {{-- <script src="{{ asset('js/page/modules-datatables.js') }}"></script> --}}
 @endpush

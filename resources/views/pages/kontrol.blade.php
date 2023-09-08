@@ -19,11 +19,22 @@
         <section class="section">
             <div class="section-header">
                 <h1>Kontrol</h1>
+                
             </div>
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group col-md-6 mb-3">
+                                    <select class="custom-select custom-select-sm mr-3" id="options">
+                                        <option selected value="0">Pilih Alat</option>
+                                        @foreach ($devices as $device )
+                                            <option value="{{$device->id}}">{{$device->name}}</option>
+                                        @endforeach
+                                      </select>
+                                </div>
+                            </div>
                             <div class="mb-4 mt-3">
                                 <div id="online" style="display : none">
                                     <span class="badge badge-pill badge-success">Online</span>
@@ -32,17 +43,18 @@
                                     <span class="badge badge-pill badge-danger">Offline</span>
                                   </div>
                             </div>
-                            <form id="formKontrol">
+                            
+                            <form id="myForm">
                                 <div class="form-row">
                                     <div class="form-group col-md-6 mb-3">
                                         <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input" id="pompaPh" >
-                                            <label class="custom-control-label " for="pompaP">Pompa PH</label>
+                                            <input type="checkbox" class="custom-control-input" id="pompaPh" name="pompaPh" >
+                                            <label class="custom-control-label " for="pompaPh">Pompa PH</label>
                                         </div>
                                     </div>
                                     <div class="form-group col-md-6 mb-3">
                                         <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input" id="pompaEc">
+                                            <input type="checkbox" class="custom-control-input" id="pompaEc" name="pompaEc">
                                             <label class="custom-control-label" for="pompaEc">Pompa EC</label>
                                         </div>
                                     </div>
@@ -50,27 +62,27 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-6 mb-3">
                                         <label for="interval">Interval Logging</label>
-                                        <input type="text" class="form-control" id="interval" required>
+                                        <input type="text" class="form-control" id="interval" name="interval" required>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6 mb-3">
                                         <label for="baPh">Batas Atas PH</label>
-                                        <input type="text" class="form-control" id="baPh" required>
+                                        <input type="text" class="form-control" id="baPh" name="baPh" required>
                                     </div>
                                     <div class="form-group col-md-6 mb-3">
                                         <label for="bbPh">Batas Bawah PH</label>
-                                        <input type="text" class="form-control" id="bbPh" required>
+                                        <input type="text" class="form-control" id="bbPh" name="bbPh" required>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6 mb-3">
                                         <label for="baEc">Batas Atas EC</label>
-                                        <input type="text" class="form-control" id="baEc" required>
+                                        <input type="text" class="form-control" id="baEc" name="baEc" required>
                                     </div>
                                     <div class="form-group col-md-6 mb-3">
                                         <label for="bbEc">Batas Bawah EC</label>
-                                        <input type="text" class="form-control" id="bbEc" required>
+                                        <input type="text" class="form-control" id="bbEc" name="bbEc" required>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -78,7 +90,7 @@
                                     <button type="submit" class="btn btn-primary">Save</button>
                                   </div>
                                 </div>
-                              </form>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -96,34 +108,63 @@ $(document).ready(function() {
     getData();
     setInterval(isOnline, 1000);
     sendForm();
-        
+    selectDevice(); 
 });
+
+function selectDevice(){
+    const selectElement = $('#options');
+    selectElement.on('change', function() {
+        const selectedValue = selectElement.val();
+        localStorage.setItem('selectedOption', selectedValue);
+        console.log(localStorage.getItem('selectedOption'));
+        getData()
+    });
+
+    // Cek apakah ada data tersimpan di Local Storage saat halaman dimuat
+    const savedValue = localStorage.getItem('selectedOption');
+    if (savedValue) {
+        selectElement.val(savedValue);
+    }
+
+}
 
 function sendForm(){
    
-    $("#formKontrol").submit(function(event) {
-    event.preventDefault();
-    var formData = $(this).serialize(); // Mengambil data form dalam bentuk query string
-
-    $.ajax({
-        type: "POST",
-        url: "URL_TARGET",
-        data: formData,
-        success: function(response) {
-            console.log("Data terkirim!");
-        },
-        error: function() {
-            console.error("Terjadi kesalahan.");
-        }
+    $("#myForm").submit(function(event) {
+        event.preventDefault();
+        const deviceId = localStorage.getItem('selectedOption');
+        var formData = $(this).serialize();
+        var formData = formData+"&deviceId="+deviceId;
+        // Mengambil data form dalam bentuk query string
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            type: "POST",
+            url: "{{ route('kontrol.update') }}",
+            data: formData,
+            headers: {
+            'X-CSRF-TOKEN': csrfToken // Menambahkan token CSRF ke dalam header
+            },
+            success: function(response) {
+                if(response=='success'){
+                    alert('Data Terkirim');
+                }
+            },
+            error: function() {
+                console.error("Terjadi kesalahan.");
+                alert('Terjadi kesalahan');
+                
+            }
+        });
     });
-});
 }
 
 function isOnline(){
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    const deviceId = localStorage.getItem('selectedOption');
     $.ajax({
         url: '{{ route('kontrol') }}', // Gantilah dengan URL Anda
         type: 'GET',
+        data : {'deviceId' : deviceId},
         dataType: 'json',
         headers: {
             'X-CSRF-TOKEN': csrfToken // Menambahkan token CSRF ke dalam header
@@ -136,11 +177,11 @@ function isOnline(){
             var divOffline = document.getElementById('offline');
 
             if (timeDifference < 60){
-                console.log('online');
+                // console.log('online');
                 divOffline.style.display = 'none';
                 divOnline.style.display = 'block';
             } else {
-                console.log('offline');
+                // console.log('offline');
                 divOffline.style.display = 'block';
                 divOnline.style.display = 'none';
             }
@@ -157,10 +198,12 @@ function isOnline(){
 
 function getData(){
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    const deviceId = localStorage.getItem('selectedOption');
     $.ajax({
         url: '{{ route('kontrol') }}', // Gantilah dengan URL Anda
         type: 'GET',
         dataType: 'json',
+        data : {'deviceId' : deviceId},
         headers: {
             'X-CSRF-TOKEN': csrfToken // Menambahkan token CSRF ke dalam header
         },
