@@ -22,7 +22,7 @@ class LoggingController extends Controller
         //jika ada request ajax maka ambil data untuk datatable
         if (request()->ajax()) {
             $device_id = $request->input('deviceId');
-            $logging = Logging::where("device_id", $device_id)->get();
+            $logging = Logging::where("device_id", $device_id)->orderBy('id', "DESC")->get();
             return DataTables::of($logging)
             ->addIndexColumn()
             ->make(true);

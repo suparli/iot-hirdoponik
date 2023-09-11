@@ -30,8 +30,8 @@ Route::post('/kontrol', [KontrolController::class ,'update'])->name('kontrol.upd
 Route::get('/logging', [LoggingController::class ,'index'])->name('logging');
 
 Route::middleware('apikey')->group(function () {
-    Route::get('/api/logging', [LoggingController::class ,'device'])->name('logging.device');
-    Route::get('/api/kontrol', [KontrolController::class ,'device'])->name('kontrol.device');
+    Route::post('/api/logging', [LoggingController::class ,'device'])->name('logging.device');
+    Route::post('/api/kontrol', [KontrolController::class ,'device'])->name('kontrol.device');
 });
 
 

@@ -109,6 +109,7 @@ $(document).ready(function() {
     setInterval(isOnline, 1000);
     sendForm();
     selectDevice(); 
+    
 });
 
 function selectDevice(){

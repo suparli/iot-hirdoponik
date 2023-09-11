@@ -38,10 +38,10 @@
                                             <th>PH</th>
                                             <th>EC</th>
                                             <th>TDS</th>
+                                            <th>Water Level</th>
                                             <th>Temperature</th>
                                             <th>Humidity</th>
                                             <th>Water Temperature</th>
-                                            <th>Water Level</th>
                                         </tr>
                                     </thead>
                                     <tbody>
