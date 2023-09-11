@@ -19,7 +19,7 @@ Route::get('/welcome', function () {
     return view('welcome');
 });
 
-Route::redirect('/', '/dashboard-general-dashboard');
+Route::redirect('/', '/kontrol');
 
 
 // Kontrol
