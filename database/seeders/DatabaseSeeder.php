@@ -63,6 +63,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\Kontrol::create([
             'device_id' => 1,
             'interval' => '10',
+            'mode' => true,
             'pompa_ph' => true,
             'pompa_ec' => true,
             'ba_ph' => '14.0',
@@ -75,6 +76,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\Kontrol::create([
             'device_id' => 2,
             'interval' => '10',
+            'mode' => true,
             'pompa_ph' => true,
             'pompa_ec' => true,
             'ba_ph' => '14.0',
@@ -86,6 +88,7 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\Kontrol::create([
             'device_id' => 3,
+            'mode' => true,
             'interval' => '10',
             'pompa_ph' => true,
             'pompa_ec' => true,
@@ -97,6 +100,7 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\Kontrol::create([
             'device_id' => 4,
+            'mode' => true,
             'interval' => '10',
             'pompa_ph' => true,
             'pompa_ec' => true,
@@ -108,6 +112,7 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\Kontrol::create([
             'device_id' => 5,
+            'mode' => true,
             'interval' => '10',
             'pompa_ph' => true,
             'pompa_ec' => true,
@@ -119,6 +124,7 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\Kontrol::create([
             'device_id' => 6,
+            'mode' => true,
             'interval' => '10',
             'pompa_ph' => true,
             'pompa_ec' => true,
@@ -130,6 +136,7 @@ class DatabaseSeeder extends Seeder
         ]);
         \App\Models\Kontrol::create([
             'device_id' => 7,
+            'mode' => true,
             'interval' => '10',
             'pompa_ph' => true,
             'pompa_ec' => true,

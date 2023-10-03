@@ -32,6 +32,7 @@ class KontrolController extends Controller
         Kontrol::where('device_id', $deviceId)->update([
             'pompa_ph' => ($request->pompaPh == 'on' ) ?  1 : 0,
             'pompa_ec' => ($request->pompaEc == 'on' ) ?  1 : 0,
+            'mode'     => ($request->mode == 'on' ) ?  1 : 0,
             'interval' => $request->interval,
             'ba_ph'    => $request->baPh,
             'bb_ph'    => $request->bbPh,

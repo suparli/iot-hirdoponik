@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('interval', 10);
             $table->boolean('pompa_ph');
             $table->boolean('pompa_ec');
+            $table->boolean('mode');
             $table->string('ba_ph', 10);
             $table->string('bb_ph', 10);
             $table->string('ba_ec', 10);

@@ -45,17 +45,18 @@
                             </div>
                             
                             <form id="myForm">
+                                
                                 <div class="form-row">
                                     <div class="form-group col-md-6 mb-3">
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input" id="pompaPh" name="pompaPh" >
-                                            <label class="custom-control-label " for="pompaPh">Pompa PH</label>
+                                            <label class="custom-control-label " for="pompaPh">Pompa A<label>
                                         </div>
                                     </div>
                                     <div class="form-group col-md-6 mb-3">
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input" id="pompaEc" name="pompaEc">
-                                            <label class="custom-control-label" for="pompaEc">Pompa EC</label>
+                                            <label class="custom-control-label" for="pompaEc">Pompa B</label>
                                         </div>
                                     </div>
                                 </div>
@@ -63,6 +64,14 @@
                                     <div class="form-group col-md-6 mb-3">
                                         <label for="interval">Interval Logging</label>
                                         <input type="text" class="form-control" id="interval" name="interval" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6 mb-3">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="mode" name="mode">
+                                            <label class="custom-control-label" for="mode">Mode Otomatis</label>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -211,6 +220,7 @@ function getData(){
         success: function(data) {
             (data.pompa_ph == 1 ) ?  $("#pompaPh").prop("checked", true) : $("#pompaPh").prop("checked", false) ;
             (data.pompa_ec == 1 ) ? $("#pompaEc").prop("checked", true) : $("#pompaEc").prop("checked", false);
+            (data.mode == true) ? $("#mode").prop("checked", true) : $("#mode").prop("checked", false);
             $("#interval").val(data.interval);
             $("#baPh").val(data.ba_ph);
             $("#bbPh").val(data.bb_ph);
